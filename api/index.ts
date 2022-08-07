@@ -1,8 +1,7 @@
 import express, { Request, Response } from 'express';
 import { renderToString } from "react-dom/server"
 import puppeteer from "puppeteer"
-import Main from './templates/Main';
-import IData from './interfaces/IData';
+import Main from '../templates/Main';
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -41,7 +40,6 @@ ${htmlString}
   
 
   const page = await browser.newPage();
-  console.log(page);
   
   await page.setContent(content, { waitUntil: "domcontentloaded" });  
   // Wait until all images and fonts have loaded
