@@ -1,15 +1,5 @@
 import React from "react";
-import styled from "styled-components";
 import IData from "../interfaces/IData";
-
-const Title = styled.h1`
-  background: linear-gradient(90deg, rgb(223, 56, 56), rgb(255, 200, 0));
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  font-weight: 700;
-  font-size: 20px;
-`;
 
 const Main = (data: IData) => {
   return (
