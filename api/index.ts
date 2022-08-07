@@ -1,8 +1,12 @@
 import express, { Request, Response } from 'express';
 import { renderToString } from "react-dom/server"
-import puppeteer from "puppeteer"
+
 import Main from '../templates/Main';
 import dotenv from 'dotenv';
+
+let chrome = {args:[],
+executablePath:""};
+let puppeteer;
 
 dotenv.config();
 
@@ -14,6 +18,13 @@ app.get('/api', (req: Request, res: Response) => {
 });
 
 app.get('/api/ogimage/:title/:subtitle', async (req: Request, res: Response) => {
+  if (process.env.AWS_LAMBDA_FUNCTION_VERSION) {
+    chrome = await import("chrome-aws-lambda");
+    puppeteer = await import("puppeteer-core");
+  } else {
+    puppeteer = await import("puppeteer")
+  }
+
   const { title, subtitle } = req.params;
   const htmlString = renderToString(Main({ title, subtitle }))
 
@@ -31,8 +42,10 @@ ${htmlString}
 `;
   
   const browser = await puppeteer.launch({
-    headless: true,
-    args: ["--no-sandbox"],
+    args: [...chrome.args, '--hide-scrollbars', '--disable-web-security'],
+      executablePath: await chrome.executablePath,
+      headless: true,
+      ignoreHTTPSErrors: true,
     defaultViewport: {
       width: 1200,
       height: 630,
