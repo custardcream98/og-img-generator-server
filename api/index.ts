@@ -1,32 +1,26 @@
 import express, { Request, Response } from 'express';
 import { renderToString } from "react-dom/server"
 import chrome from "chrome-aws-lambda"
+import puppeteer from "puppeteer-core"
+import getFonts from './getFonts';
 import Main from '../templates/Main';
-import dotenv from 'dotenv';
-
-let puppeteer;
-
-dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 5000;
 
-app.get('/api', (req: Request, res: Response) => {
-  res.send('Express + TypeScript Server');
-});
-
 app.get('/api/ogimage/:title/:subtitle', async (req: Request, res: Response) => {
-  if (process.env.AWS_LAMBDA_FUNCTION_VERSION) {
-    puppeteer = await import("puppeteer-core");
-  } else {
-    puppeteer = await import("puppeteer")
-  }
+  // if (process.env.NODE_ENV === 'production') {
+  //   puppeteer = await import("puppeteer-core");
+  // } else {
+  //   puppeteer = await import("puppeteer")
+  // }
 
   const { title, subtitle } = req.params;
   const htmlString = renderToString(Main({ title, subtitle }))
 
   const content = `
 <style>
+  ${getFonts}
   body {
     margin: 0;
     padding: 0;
@@ -38,16 +32,20 @@ ${htmlString}
 </body>
 `;
   
-  const browser = await puppeteer.launch({
-    args: [...chrome.args, '--hide-scrollbars', '--disable-web-security'],
-      executablePath: await chrome.executablePath,
-      headless: true,
-      ignoreHTTPSErrors: true,
-    defaultViewport: {
+  const browser = await puppeteer.launch(process.env.AWS_EXECUTION_ENV ? {
+    args: chrome.args,
+    executablePath: await chrome.executablePath,
+    headless: chrome.headless,defaultViewport: {
       width: 1200,
       height: 630,
     }
-  });
+  } : {
+    args: [],
+    executablePath: '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',defaultViewport: {
+      width: 1200,
+      height: 630,
+    }
+  })
   
 
   const page = await browser.newPage();

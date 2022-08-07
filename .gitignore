@@ -39,3 +39,7 @@ dist/**/*
 
 # ignore yarn.lock
 yarn.lock
+.vercel
+
+# Local Netlify folder
+.netlify

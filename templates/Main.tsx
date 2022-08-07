@@ -11,7 +11,7 @@ const Main = (data: IData) => {
         alignItems: "center",
         backgroundColor: "black",
         fontFamily:
-          '-apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji"',
+          '"Noto Sans KR", "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji"',
         width: "1200px",
         height: "630px",
       }}
