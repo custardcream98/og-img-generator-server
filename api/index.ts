@@ -1,11 +1,9 @@
 import express, { Request, Response } from 'express';
 import { renderToString } from "react-dom/server"
-
+import chrome from "chrome-aws-lambda"
 import Main from '../templates/Main';
 import dotenv from 'dotenv';
 
-let chrome = {args:[],
-executablePath:""};
 let puppeteer;
 
 dotenv.config();
@@ -19,7 +17,6 @@ app.get('/api', (req: Request, res: Response) => {
 
 app.get('/api/ogimage/:title/:subtitle', async (req: Request, res: Response) => {
   if (process.env.AWS_LAMBDA_FUNCTION_VERSION) {
-    chrome = await import("chrome-aws-lambda");
     puppeteer = await import("puppeteer-core");
   } else {
     puppeteer = await import("puppeteer")
