@@ -9,12 +9,13 @@ dotenv.config();
 const app = express();
 const port = process.env.PORT || 5000;
 
-app.get('/', (req: Request, res: Response) => {
+app.get('/api', (req: Request, res: Response) => {
   res.send('Express + TypeScript Server');
 });
 
-app.get('/ogimage/:title/:subtitle', async(req: Request, res: Response) => {
-  const htmlString = renderToString(Main({ title: req.params.title, subtitle: req.params.subtitle }))
+app.get('/api/ogimage/:title/:subtitle', async (req: Request, res: Response) => {
+  const { title, subtitle } = req.params;
+  const htmlString = renderToString(Main({ title, subtitle }))
 
   const content = `
 <style>
@@ -70,6 +71,10 @@ ${htmlString}
   res.end(image);
 })
 
-app.listen(port, () => {
-  console.log(`⚡️[server]: Server is running at https://localhost:${port}`);
-});
+if (process.env.DEV) {
+  app.listen(port, () => {
+    console.log(`⚡️[server]: Server is running at PORT : ${port}`);
+  });
+}
+
+export default app;
