@@ -2,11 +2,11 @@
   "name": "og-img-generator-server",
   "version": "1.0.0",
   "description": "",
-  "main": "index.ts",
+  "main": "api/index.ts",
   "scripts": {
     "build": "npx tsc",
-    "start": "node dist/index.js",
-    "dev": "concurrently \"npx tsc --watch\" \"nodemon -q dist/index.js\""
+    "start": "node dist/api/index.js",
+    "dev": "concurrently \"npx tsc --watch\" \"nodemon -q dist/api/index.js\""
   },
   "repository": {
     "type": "git",
