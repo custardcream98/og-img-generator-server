@@ -11,7 +11,6 @@ app.use(express.static("public"));
 // });
 
 app.get('/ogimage', async (req, res) => { // Note the async
-  // ...
   const browser = await puppeteer.launch({
     headless: true,
     args: ["--no-sandbox"],
@@ -21,7 +20,7 @@ app.get('/ogimage', async (req, res) => { // Note the async
     }
   });
   const page = await browser.newPage();
-  await page.goto(process.env.BASE_URL || "http://localhost:5000");    
+  await page.goto(`${process.env.BASE_URL}?title=${req.query.title}` || `http://localhost:5000/?title=${req.query.title}`);    
   
   // await page.goto(path.join("file://",__dirname, "..","..","build", "index.html"));    
   const element = await page.$('#root');
