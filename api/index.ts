@@ -79,10 +79,9 @@ ${htmlString}
   res.end(image);
 })
 
-if (process.env.DEV) {
-  app.listen(port, () => {
-    console.log(`⚡️[server]: Server is running at PORT : ${port}`);
-  });
-}
+app.listen(port, () => {
+  console.log(`⚡️[server]: Server is running at PORT : ${port}`);
+});
+
 
 export default app;
