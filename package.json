@@ -5,7 +5,6 @@
   "main": "api/index.ts",
   "scripts": {
     "build": "npm install typescript && (AWS_LAMBDA_FUNCTION_NAME=true npm run tsc && (mkdir dist/public && mkdir dist/public/fonts && cp public/fonts/* dist/public/fonts))",
-
     "start": "node dist/api/index.js",
     "tsc": "node_modules/typescript/bin/tsc",
     "dev": "concurrently \"npx tsc --watch\" \"nodemon -q dist/api/index.js\""
@@ -22,25 +21,22 @@
   },
   "homepage": "https://github.com/custardcream98/og-img-generator-server#readme",
   "dependencies": {
-    "chrome-aws-lambda": "9.1.0",
-    "express": "^4.18.1",
-    "puppeteer-core": "9.1.0",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
     "@babel/cli": "^7.18.10",
     "@babel/core": "^7.18.10",
     "@babel/preset-react": "^7.18.6",
     "@types/express": "^4.17.13",
     "@types/node": "^18.6.4",
     "@types/puppeteer-core": "^5.4.0",
-    "typescript": "^4.7.4",
     "@types/react": "^18.0.16",
-    "@types/react-dom": "^18.0.6"
+    "@types/react-dom": "^18.0.6",
+    "express": "^4.18.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "typescript": "^4.7.4",
+    "puppeteer": "^16.1.0"
   },
   "devDependencies": {
     "concurrently": "^7.3.0",
-    "nodemon": "^2.0.19",
-    "puppeteer": "^16.1.0"
-    
+    "nodemon": "^2.0.19"
   }
 }

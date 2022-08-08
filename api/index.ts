@@ -1,7 +1,6 @@
 import express, { Request, Response } from 'express';
 import { renderToString } from "react-dom/server"
-import chrome from "chrome-aws-lambda"
-import puppeteer from "puppeteer-core"
+import puppeteer from "puppeteer"
 import getFonts from './getFonts';
 import Main from '../templates/Main';
 
@@ -32,16 +31,12 @@ ${htmlString}
 </body>
 `;
   
-  const browser = await puppeteer.launch(process.env.AWS_EXECUTION_ENV ? {
-    args: chrome.args,
-    executablePath: await chrome.executablePath,
-    headless: chrome.headless,defaultViewport: {
-      width: 1200,
-      height: 630,
-    }
-  } : {
-    args: [],
-    executablePath: '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',defaultViewport: {
+  const browser = await puppeteer.launch( {
+    args: [
+    '--no-sandbox',
+    '--disable-setuid-sandbox'
+  ],
+    defaultViewport: {
       width: 1200,
       height: 630,
     }
