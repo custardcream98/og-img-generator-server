@@ -5,7 +5,7 @@
   "main": "api/index.ts",
   "scripts": {
     "build": "npm install typescript && (AWS_LAMBDA_FUNCTION_NAME=true npm run tsc && (mkdir dist/public && mkdir dist/public/fonts && cp public/fonts/* dist/public/fonts))",
-    "postinstall": "npm run build",
+
     "start": "node dist/api/index.js",
     "tsc": "node_modules/typescript/bin/tsc",
     "dev": "concurrently \"npx tsc --watch\" \"nodemon -q dist/api/index.js\""
