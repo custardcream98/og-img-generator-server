@@ -1,19 +1,16 @@
 import express, { Request, Response } from 'express';
 import { renderToString } from "react-dom/server"
 import puppeteer from "puppeteer"
+import cors from "cors";
 import getFonts from './getFonts';
 import Main from '../templates/Main';
 
 const app = express();
 const port = process.env.PORT || 5000;
 
-app.get('/api/ogimage/:title/:subtitle', async (req: Request, res: Response) => {
-  // if (process.env.NODE_ENV === 'production') {
-  //   puppeteer = await import("puppeteer-core");
-  // } else {
-  //   puppeteer = await import("puppeteer")
-  // }
+app.use(cors())
 
+app.get('/api/ogimage/:title/:subtitle', async (req: Request, res: Response) => {
   const { title, subtitle } = req.params;
   const htmlString = renderToString(Main({ title, subtitle }))
 
