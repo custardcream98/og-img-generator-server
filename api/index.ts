@@ -2,56 +2,56 @@ import express, { Request, Response } from 'express';
 import { renderToString } from "react-dom/server"
 import puppeteer from "puppeteer"
 import cors from "cors";
-import getFonts from './getFonts';
+import { createHash } from "crypto"
+import { ref, uploadBytes } from "firebase/storage";
+import { firebaseStorage, adminBucket } from '../firebase';
 import Main from '../templates/Main';
+
+function toArrayBuffer(buf:Buffer) {
+    const ab = new ArrayBuffer(buf.length);
+    const view = new Uint8Array(ab);
+    for (let i = 0; i < buf.length; ++i) {
+        view[i] = buf[i];
+    }
+    return ab;
+}
 
 const app = express();
 const port = process.env.PORT || 5000;
 
 app.use(cors())
 
-app.get('/:title/:subtitle', async (req: Request, res: Response) => {
+app.get('/og/:title/:subtitle', async (req: Request, res: Response) => {
   const { title, subtitle } = req.params;
-  const htmlString = renderToString(Main({ title, subtitle }))
 
-  const content = `
-<style>
-  ${getFonts}
-  body {
-    margin: 0;
-    padding: 0;
-  }
-  h1, p {
-    margin: 0;
-    padding: 0;
-  }
-</style>
+  const hashedName = createHash('md5').update(`${title}${subtitle}`).digest('hex')
+  const fileName = `thumbnails/${hashedName}.webp`
+  const file = adminBucket.file(fileName)
+  file.exists().then().catch(async() => {
+    const htmlString = renderToString(Main({ title, subtitle }))
+    
+    const browser = await puppeteer.launch( {
+      args: [
+      '--no-sandbox',
+      '--disable-setuid-sandbox'
+    ],
+      defaultViewport: {
+        width: 1200,
+        height: 630,
+      }
+    })
+    
+    const page = await browser.newPage();
+    await page.setContent(htmlString, { waitUntil: "domcontentloaded" });  
+    const image = await page.screenshot({ omitBackground: true, type:'webp', encoding:'binary',});  
+    await browser.close();
+    
+    const storageRef = ref(firebaseStorage, fileName)
 
-<body>
-${htmlString}
-</body>
-`;
-  
-  const browser = await puppeteer.launch( {
-    args: [
-    '--no-sandbox',
-    '--disable-setuid-sandbox'
-  ],
-    defaultViewport: {
-      width: 1200,
-      height: 630,
-    }
+    await uploadBytes(storageRef, toArrayBuffer(image as Buffer))
   })
-  
 
-  const page = await browser.newPage();
-  
-  await page.setContent(content, { waitUntil: "domcontentloaded" });  
-
-  const image = await page.screenshot({ omitBackground: true });  
-  await browser.close();
-  res.writeHead(200, { 'Content-Type': 'image/png', 'Cache-Control': `immutable, no-transform, s-max-age=2592000, max-age=2592000` });
-  res.end(image);
+  res.send({created:fileName})
 })
 
 app.listen(port, () => {
