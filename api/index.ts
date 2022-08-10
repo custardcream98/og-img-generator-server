@@ -5,6 +5,7 @@ import cors from "cors";
 import { createHash } from "crypto"
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { firebaseStorage, adminBucket } from '../firebase';
+import getFonts from './getFonts';
 import Main from '../templates/Main';
 
 function toArrayBuffer(buf:Buffer) {
@@ -32,6 +33,25 @@ app.get('/og/:title/:subtitle', async (req: Request, res: Response) => {
   await file.exists().then(
   ).catch(async () => {
     const htmlString = renderToString(Main({ title, subtitle }))
+
+    const content = `
+    <style>
+      ${getFonts}
+        
+      body {
+        margin: 0;
+        padding: 0;
+      }
+
+      h1, p {
+        margin: 0;
+        padding: 0;
+      }
+      </style>
+      <body>
+      ${htmlString}
+      </body>
+    `
     
     const browser = await puppeteer.launch( {
       args: [
@@ -45,7 +65,7 @@ app.get('/og/:title/:subtitle', async (req: Request, res: Response) => {
     })
     
     const page = await browser.newPage();
-    await page.setContent(htmlString, { waitUntil: "domcontentloaded" });  
+    await page.setContent(content, { waitUntil: "domcontentloaded" });  
     const image = await page.screenshot({ omitBackground: true, type:'webp', encoding:'binary',});  
     await browser.close();
     
