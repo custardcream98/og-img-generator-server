@@ -8,15 +8,6 @@ import { firebaseStorage, adminBucket } from '../firebase';
 import getFonts from './getFonts';
 import Main from '../templates/Main';
 
-function toArrayBuffer(buf:Buffer) {
-    const ab = new ArrayBuffer(buf.length);
-    const view = new Uint8Array(ab);
-    for (let i = 0; i < buf.length; ++i) {
-        view[i] = buf[i];
-    }
-    return ab;
-}
-
 const app = express();
 const port = process.env.PORT || 5000;
 
@@ -69,7 +60,7 @@ app.get('/og/:title/:subtitle', async (req: Request, res: Response) => {
     const image = await page.screenshot({ omitBackground: true, type:'webp', encoding:'binary',});  
     await browser.close();
     
-    await uploadBytes(storageRef, toArrayBuffer(image as Buffer))
+    await uploadBytes(storageRef, (image as Buffer).buffer)
   })
   res.send({created:await getDownloadURL(storageRef)})
 })
