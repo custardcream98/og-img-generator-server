@@ -7,7 +7,7 @@ const Main = (data: IData) => {
       style={{
         display: "flex",
         flexDirection: "column",
-        justifyContent: "center",
+        justifyContent: "space-evenly",
         alignItems: "center",
         backgroundColor: "black",
         fontFamily:
@@ -18,6 +18,7 @@ const Main = (data: IData) => {
     >
       <h1
         style={{
+          display: "flex",
           background:
             "linear-gradient(90deg, rgb(223, 56, 56), rgb(255, 200, 0))",
           WebkitBackgroundClip: "text",
@@ -29,16 +30,28 @@ const Main = (data: IData) => {
       >
         {data.title}
       </h1>
-      <h2
+      <div
         style={{
-          color: "white",
-          fontWeight: 500,
-          fontSize: data.subtitle.length < 21 ? "50px" : "40px",
-          width: "1000px",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          maxWidth: "1000px",
+          height: "min-content",
         }}
       >
-        {data.subtitle}
-      </h2>
+        <p
+          style={{
+            color: "white",
+            fontWeight: 500,
+            fontSize: data.subtitle.length < 21 ? "50px" : "40px",
+            textAlign: "center",
+            overflowWrap: "break-word",
+            maxWidth: "inherit",
+          }}
+        >
+          {data.subtitle}
+        </p>
+      </div>
     </div>
   );
 };

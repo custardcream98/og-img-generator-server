@@ -20,7 +20,11 @@ app.get('/:title/:subtitle', async (req: Request, res: Response) => {
   body {
     margin: 0;
     padding: 0;
-    }
+  }
+  h1, p {
+    margin: 0;
+    padding: 0;
+  }
 </style>
 
 <body>
