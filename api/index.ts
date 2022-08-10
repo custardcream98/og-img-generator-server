@@ -3,7 +3,7 @@ import { renderToString } from "react-dom/server"
 import puppeteer from "puppeteer"
 import cors from "cors";
 import { createHash } from "crypto"
-import { ref, uploadBytes } from "firebase/storage";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { firebaseStorage, adminBucket } from '../firebase';
 import Main from '../templates/Main';
 
@@ -27,6 +27,8 @@ app.get('/og/:title/:subtitle', async (req: Request, res: Response) => {
   const hashedName = createHash('md5').update(`${title}${subtitle}`).digest('hex')
   const fileName = `thumbnails/${hashedName}.webp`
   const file = adminBucket.file(fileName)
+  const storageRef = ref(firebaseStorage, fileName)
+
   file.exists().then().catch(async() => {
     const htmlString = renderToString(Main({ title, subtitle }))
     
@@ -46,12 +48,11 @@ app.get('/og/:title/:subtitle', async (req: Request, res: Response) => {
     const image = await page.screenshot({ omitBackground: true, type:'webp', encoding:'binary',});  
     await browser.close();
     
-    const storageRef = ref(firebaseStorage, fileName)
 
     await uploadBytes(storageRef, toArrayBuffer(image as Buffer))
   })
 
-  res.send({created:fileName})
+  res.send({created:await getDownloadURL(storageRef)})
 })
 
 app.listen(port, () => {
