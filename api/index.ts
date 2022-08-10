@@ -29,7 +29,8 @@ app.get('/og/:title/:subtitle', async (req: Request, res: Response) => {
   const file = adminBucket.file(fileName)
   const storageRef = ref(firebaseStorage, fileName)
 
-  file.exists().then().catch(async() => {
+  await file.exists().then(
+  ).catch(async () => {
     const htmlString = renderToString(Main({ title, subtitle }))
     
     const browser = await puppeteer.launch( {
@@ -48,10 +49,8 @@ app.get('/og/:title/:subtitle', async (req: Request, res: Response) => {
     const image = await page.screenshot({ omitBackground: true, type:'webp', encoding:'binary',});  
     await browser.close();
     
-
     await uploadBytes(storageRef, toArrayBuffer(image as Buffer))
   })
-
   res.send({created:await getDownloadURL(storageRef)})
 })
 
@@ -62,6 +61,5 @@ app.listen(port, () => {
 app.on('error', (e) => {
   console.log(e)
 })
-
 
 export default app;
