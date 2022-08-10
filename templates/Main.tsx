@@ -29,7 +29,14 @@ const Main = (data: IData) => {
       >
         {data.title}
       </h1>
-      <h2 style={{ color: "white", fontWeight: 500, fontSize: "50px" }}>
+      <h2
+        style={{
+          color: "white",
+          fontWeight: 500,
+          fontSize: data.subtitle.length < 21 ? "50px" : "40px",
+          width: "1000px",
+        }}
+      >
         {data.subtitle}
       </h2>
     </div>

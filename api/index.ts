@@ -10,7 +10,7 @@ const port = process.env.PORT || 5000;
 
 app.use(cors())
 
-app.get('/api/ogimage/:title/:subtitle', async (req: Request, res: Response) => {
+app.get('/:title/:subtitle', async (req: Request, res: Response) => {
   const { title, subtitle } = req.params;
   const htmlString = renderToString(Main({ title, subtitle }))
 
@@ -53,6 +53,10 @@ ${htmlString}
 app.listen(port, () => {
   console.log(`⚡️[server]: Server is running at PORT : ${port}`);
 });
+
+app.on('error', (e) => {
+  console.log(e)
+})
 
 
 export default app;
