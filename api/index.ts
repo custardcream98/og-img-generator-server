@@ -9,11 +9,11 @@ import getFonts from '../lib/getFonts';
 import Main from '../lib/templates/Main';
 
 const app = express();
-const port = process.env.PORT || 5000;
+// const port = process.env.PORT || 5000;
 
 app.use(cors())
 
-app.get('/og/:title/:subtitle', async (req: Request, res: Response) => {
+app.get('/api/:title/:subtitle', async (req: Request, res: Response) => {
   const { title, subtitle } = req.params;
 
   const hashedName = createHash('md5').update(`${title}${subtitle}`).digest('hex')
@@ -65,9 +65,9 @@ app.get('/og/:title/:subtitle', async (req: Request, res: Response) => {
   res.send({created:await getDownloadURL(storageRef)})
 })
 
-app.listen(port, () => {
-  console.log(`⚡️[server]: Server is running at PORT : ${port}`);
-});
+// app.listen(port, () => {
+//   console.log(`⚡️[server]: Server is running at PORT : ${port}`);
+// });
 
 app.on('error', (e) => {
   console.log(e)
