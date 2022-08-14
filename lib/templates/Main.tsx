@@ -1,5 +1,5 @@
 import React from "react";
-import IData from "../interfaces/IData";
+import IData from "../../interfaces/IData";
 
 const Main = (data: IData) => {
   return (
