@@ -18,5 +18,5 @@ const firebaseApp = initializeApp(firebaseConfig);
 
 export const firebaseStorage = getStorage(firebaseApp);
 
-admin.initializeApp(firebaseConfig)
+// admin.initializeApp(firebaseConfig)
 export const adminBucket = admin.storage().bucket()
