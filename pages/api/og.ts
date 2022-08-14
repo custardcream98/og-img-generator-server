@@ -1,10 +1,11 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { renderToString } from "react-dom/server"
-import playwright from "playwright-aws-lambda"
+import chrome from 'chrome-aws-lambda';
+import puppeteer from 'puppeteer-core';
 import { createHash } from "crypto"
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { firebaseStorage, adminBucket } from '../../lib/firebase';
-import getFonts from '../../lib/getFonts';
+// import getFonts from '../../lib/getFonts';
 import Main from '../../lib/templates/Main';
 
 export default async (req: NextApiRequest, res: NextApiResponse, ...props) => {  
@@ -21,8 +22,6 @@ export default async (req: NextApiRequest, res: NextApiResponse, ...props) => {
 
     const content = `
     <style>
-      ${getFonts}
-        
       body {
         margin: 0;
         padding: 0;
@@ -38,26 +37,29 @@ export default async (req: NextApiRequest, res: NextApiResponse, ...props) => {
       </body>
     `
     
-    const browser = await playwright.launchChromium({
-      headless:true,
-      args: [
-      '--no-sandbox',
-      '--disable-setuid-sandbox'
-      ],
-    })
-    // const context = await browser.newContext()
-    // const page = await context.newPage();
+    const options = process.env.AWS_REGION
+    ? {
+        args: chrome.args,
+        executablePath: await chrome.executablePath,
+        headless: chrome.headless
+      }
+    : {
+        args: [],
+        executablePath:
+          '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'
+      };
+    const browser = await puppeteer.launch(options)
     const page = await browser.newPage();
-    await page.setViewportSize({
+    await page.setViewport({
       width: 1200,
       height: 630,
     });
     await page.setContent(content, { waitUntil: "domcontentloaded" });  
-    const image = await page.screenshot({ omitBackground: true});  
+    const image = await page.screenshot({ omitBackground: true, type:'png'});  
     await browser.close();
-    // await context.close();
     
     await uploadBytes(storageRef, (image as Buffer).buffer)
   })
+
   res.send({created:await getDownloadURL(storageRef)})
 };

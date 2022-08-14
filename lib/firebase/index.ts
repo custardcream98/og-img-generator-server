@@ -1,9 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getStorage } from "firebase/storage"
 import admin from "firebase-admin"
-import dotenv from "dotenv"
-
-dotenv.config();
 
 const firebaseConfig = {
   apiKey: process.env.FIREBASE_API_KEY,
@@ -18,5 +15,5 @@ const firebaseApp = initializeApp(firebaseConfig);
 
 export const firebaseStorage = getStorage(firebaseApp);
 
-// admin.initializeApp(firebaseConfig)
+admin.initializeApp(firebaseConfig)
 export const adminBucket = admin.storage().bucket()

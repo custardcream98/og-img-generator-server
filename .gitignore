@@ -43,3 +43,7 @@ yarn.lock
 
 # Local Netlify folder
 .netlify
+
+.env.local
+
+.next
