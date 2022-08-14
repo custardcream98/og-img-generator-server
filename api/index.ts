@@ -1,5 +1,6 @@
 import express, { Request, Response } from 'express';
 import { renderToString } from "react-dom/server"
+import bodyParser from 'body-parser';
 import puppeteer from "puppeteer"
 import cors from "cors";
 import { createHash } from "crypto"
@@ -12,9 +13,10 @@ const app = express();
 const port = process.env.PORT || 5000;
 
 app.use(cors())
+app.use(bodyParser.json())
 
-app.get('/og/:title/:subtitle', async (req: Request, res: Response) => {
-  const { title, subtitle } = req.params;
+app.post('/og', async (req: Request, res: Response) => {
+  const { title, subtitle } = req.body;
 
   const hashedName = createHash('md5').update(`${title}${subtitle}`).digest('hex')
   const fileName = `thumbnails/${hashedName}.webp`
