@@ -67,6 +67,48 @@ app.post('/og', async (req: Request, res: Response) => {
   res.send({created:await getDownloadURL(storageRef)})
 })
 
+app.get('/', async(req: Request, res: Response) => {
+   const htmlString = renderToString(Main({ title:'개발자 시우의 블로그', subtitle:"테스트 문구" }))
+
+  const content = `
+  <style>
+    ${getFonts}
+      
+    body {
+      margin: 0;
+      padding: 0;
+      width: 100vw;
+      height: 52.5vw;
+    }
+
+    h1, p {
+      margin: 0;
+      padding: 0;
+    }
+    </style>
+    <body>
+    ${htmlString}
+    </body>
+  `
+  
+  // const browser = await puppeteer.launch( {
+  //   args: [
+  //   '--no-sandbox',
+  //   '--disable-setuid-sandbox'
+  // ],
+  //   defaultViewport: {
+  //     width: 100vw,
+  //     height: 630,
+  //   }
+  // })
+  
+  // const page = await browser.newPage();
+  // await page.setContent(content, { waitUntil: "domcontentloaded" });  
+  // const image = await page.screenshot({ omitBackground: true, type:'webp', encoding:'binary',});  
+  // await browser.close();
+  res.send(content)
+})
+
 app.listen(port, () => {
   console.log(`⚡️[server]: Server is running at PORT : ${port}`);
 });
