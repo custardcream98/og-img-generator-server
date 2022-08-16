@@ -24,8 +24,11 @@ const Main = (data: IData) => {
           WebkitBackgroundClip: "text",
           backgroundClip: "text",
           WebkitTextFillColor: "transparent",
+          maxWidth: "700px",
+          wordBreak: "keep-all",
+          textAlign: "center",
           fontWeight: 800,
-          fontSize: "100px",
+          fontSize: "90px",
         }}
       >
         {data.title}
@@ -42,7 +45,7 @@ const Main = (data: IData) => {
         <p
           style={{
             color: "white",
-            fontWeight: 500,
+            fontWeight: 400,
             fontSize: data.subtitle.length < 21 ? "50px" : "40px",
             textAlign: "center",
             overflowWrap: "break-word",
