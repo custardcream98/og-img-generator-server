@@ -68,7 +68,7 @@ app.post('/og', async (req: Request, res: Response) => {
 })
 
 app.get('/', async(req: Request, res: Response) => {
-   const htmlString = renderToString(Main({ title:'개발자 시우의 블로그', subtitle:"테스트 문구" }))
+  const htmlString = renderToString(Main({ title:'개발자 시우의 블로그', subtitle:"테스트 문구" }))
 
   const content = `
   <style>
