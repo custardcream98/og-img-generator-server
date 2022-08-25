@@ -1,10 +1,10 @@
 import { readFileSync } from "fs";
 
 const medium = readFileSync(
-  `${__dirname}/../public/fonts/NotoSansKR-Medium.otf`
+  `${__dirname}/../../public/fonts/NotoSansKR-Medium.otf`
 ).toString("base64");
 const black = readFileSync(
-  `${__dirname}/../public/fonts/NotoSansKR-Black.otf`
+  `${__dirname}/../../public/fonts/NotoSansKR-Black.otf`
 ).toString("base64");
 
 export default `
