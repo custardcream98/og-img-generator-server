@@ -1,7 +1,8 @@
 import { initializeApp } from "firebase/app";
-import { getStorage } from "firebase/storage"
-import admin from "firebase-admin"
-import dotenv from "dotenv"
+import { getStorage } from "firebase/storage";
+import admin from "firebase-admin";
+// const serviceAccount = require("../serviceAccountKey.json");
+import dotenv from "dotenv";
 
 dotenv.config();
 
@@ -18,5 +19,8 @@ const firebaseApp = initializeApp(firebaseConfig);
 
 export const firebaseStorage = getStorage(firebaseApp);
 
-admin.initializeApp(firebaseConfig)
-export const adminBucket = admin.storage().bucket()
+admin.initializeApp({
+  credential: admin.credential.cert(`${__dirname}/../../firebase/serviceAccountKey.json`),
+  storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
+});
+export const adminBucket = admin.storage().bucket();

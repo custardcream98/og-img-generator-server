@@ -9,7 +9,7 @@ const Main = (data: IData) => {
         flexDirection: "column",
         justifyContent: "space-evenly",
         alignItems: "center",
-        backgroundColor: "black",
+        backgroundColor: "#121212",
         fontFamily:
           '"Noto Sans KR", "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji"',
         width: "1200px",
